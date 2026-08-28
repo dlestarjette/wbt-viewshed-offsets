@@ -12,6 +12,7 @@ version: 0.1.0
 date-released: 2026-08-28
 license: MIT
 repository-code: "https://github.com/dlestarjette/wbt-viewshed-offsets"
+doi: 10.5281/zenodo.22149993
 keywords:
   - viewshed
   - visibility analysis

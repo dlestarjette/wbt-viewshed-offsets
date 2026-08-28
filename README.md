@@ -1,5 +1,7 @@
 # wbt-viewshed-offsets
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22149993.svg)](https://doi.org/10.5281/zenodo.22149993)
+
 A [WhiteboxTools](https://github.com/jblindsay/whitebox-tools) plugin that gives `Viewshed` three things it does not have: a **target offset** (GRASS-style OFFSETB), **earth-curvature and refraction correction**, and a **maximum viewing distance**.
 
 ```
