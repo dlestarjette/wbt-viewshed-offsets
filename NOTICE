@@ -43,4 +43,4 @@ WhiteboxTools is distributed under the MIT License:
     SOFTWARE.
 
 This plugin additionally links the `whitebox_raster`, `whitebox_vector` and
-`whitebox_common` crates from the same repository and under the same licence.
+`whitebox_common` crates from the same repository and under the same license.

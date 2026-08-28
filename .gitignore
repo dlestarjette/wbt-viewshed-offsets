@@ -1,3 +1,8 @@
 target/
 Cargo.lock
 .DS_Store
+tests/cross_engine_pairs.csv
+tests/area_crosscheck_los.csv
+tests/area_crosscheck_sizes.json
+__pycache__/
+*.pyc

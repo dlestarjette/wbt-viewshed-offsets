@@ -1,0 +1,131 @@
+{
+    "tool_name": "ViewshedOffsets",
+    "exe": "viewshed_offsets",
+    "short_description": "Identifies the viewshed for a point or set of points, with observer and target offsets, optional earth-curvature correction, and an optional maximum viewing distance.",
+    "toolbox": "Geomorphometric Analysis",
+    "license": "MIT",
+    "example": ".*EXE_NAME -r=ViewshedOffsets --dem=DEM.tif --stations=sites.shp -o=vs.tif --offset_a=1.7 --offset_b=1.7 --curvature --refraction_k=0.13 --max_dist=50000",
+    "parameters": [
+        {
+            "name": "Input DEM File",
+            "flags": [
+                "-d",
+                "--dem"
+            ],
+            "description": "Name of the input raster DEM file.",
+            "parameter_type": {
+                "ExistingFile": "Raster"
+            },
+            "default_value": null,
+            "optional": false
+        },
+        {
+            "name": "Input Viewing Station Vector File",
+            "flags": [
+                "--stations"
+            ],
+            "description": "Name of the input viewing station vector points file.",
+            "parameter_type": {
+                "ExistingFile": {
+                    "Vector": "Point"
+                }
+            },
+            "default_value": null,
+            "optional": false
+        },
+        {
+            "name": "Output Raster File",
+            "flags": [
+                "-o",
+                "--output"
+            ],
+            "description": "Name of the output raster file.",
+            "parameter_type": {
+                "NewFile": "Raster"
+            },
+            "default_value": null,
+            "optional": false
+        },
+        {
+            "name": "Observer Height (OFFSETA)",
+            "flags": [
+                "--offset_a",
+                "--height"
+            ],
+            "description": "Viewing station height above the ground surface, in z units.",
+            "parameter_type": "Float",
+            "default_value": "2.0",
+            "optional": true
+        },
+        {
+            "name": "Target Height (OFFSETB)",
+            "flags": [
+                "--offset_b"
+            ],
+            "description": "Target height above the ground surface, in z units. Zero reproduces the built-in Viewshed tool exactly.",
+            "parameter_type": "Float",
+            "default_value": "0.0",
+            "optional": true
+        },
+        {
+            "name": "Maximum Viewing Distance",
+            "flags": [
+                "--max_dist"
+            ],
+            "description": "Maximum viewing distance in xy units. Masks to a disc, not the bounding square. Unlimited if omitted.",
+            "parameter_type": "Float",
+            "default_value": null,
+            "optional": true
+        },
+        {
+            "name": "Apply Earth Curvature Correction",
+            "flags": [
+                "--curvature"
+            ],
+            "description": "Correct for earth curvature and atmospheric refraction. Requires --refraction_k.",
+            "parameter_type": "Boolean",
+            "default_value": "false",
+            "optional": true
+        },
+        {
+            "name": "Refraction Coefficient",
+            "flags": [
+                "--refraction_k"
+            ],
+            "description": "Atmospheric refraction coefficient used with --curvature. Deliberately has no default; 0.13 is the common geodetic value.",
+            "parameter_type": "Float",
+            "default_value": null,
+            "optional": true
+        },
+        {
+            "name": "Earth Radius",
+            "flags": [
+                "--earth_radius"
+            ],
+            "description": "Earth radius in the DEM's horizontal units, used with --curvature. Also confirms intent when those units are projected but not meters.",
+            "parameter_type": "Float",
+            "default_value": "6371000.0",
+            "optional": true
+        },
+        {
+            "name": "Z Conversion Factor",
+            "flags": [
+                "--z_factor"
+            ],
+            "description": "Multiplier converting the DEM's vertical units to its horizontal units, for --curvature only. Use 0.3048 for elevations in feet with coordinates in meters.",
+            "parameter_type": "Float",
+            "default_value": "1.0",
+            "optional": true
+        },
+        {
+            "name": "Station Ground Elevation",
+            "flags": [
+                "--station_z"
+            ],
+            "description": "Absolute ground elevation for the viewing stations, replacing the DEM lookup. Use for observers not standing on the terrain (a boat, an aircraft) or where the DEM has no value beneath the station. --offset_a is still added on top.",
+            "parameter_type": "Float",
+            "default_value": null,
+            "optional": true
+        }
+    ]
+}

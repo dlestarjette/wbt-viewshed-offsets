@@ -1,0 +1,88 @@
+name: release
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: ${{ matrix.target }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-14
+            target: aarch64-apple-darwin
+          - os: macos-13
+            target: x86_64-apple-darwin
+          - os: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+          - os: windows-latest
+            target: x86_64-pc-windows-msvc
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          key: ${{ matrix.target }}
+
+      - name: Build
+        run: cargo build --release --target ${{ matrix.target }}
+
+      # The plugin must at least start, parse args and print its own help on
+      # every platform we ship. A binary that cannot do that is not worth
+      # uploading, and the parity gate needs real terrain so it cannot run here.
+      - name: Check the binary runs
+        shell: bash
+        run: |
+          BIN=target/${{ matrix.target }}/release/viewshed_offsets
+          [ "${{ runner.os }}" = "Windows" ] && BIN="$BIN.exe"
+          "$BIN" version
+          "$BIN" help | grep -q -- "--offset_b"
+          # --curvature without --refraction_k must be refused, not defaulted.
+          if "$BIN" run --dem=x.tif --stations=x.shp -o=o.tif --curvature 2>&1 \
+              | grep -q "requires --refraction_k"; then
+            echo "refraction_k is correctly required"
+          else
+            echo "FAIL: --curvature did not require --refraction_k"; exit 1
+          fi
+
+      - name: Package
+        shell: bash
+        run: |
+          mkdir -p dist
+          BIN=target/${{ matrix.target }}/release/viewshed_offsets
+          [ "${{ runner.os }}" = "Windows" ] && BIN="$BIN.exe"
+          cp "$BIN" dist/
+          cp viewshed_offsets.json dist/
+          cp LICENSE NOTICE README.md dist/
+          tar -czf viewshed_offsets-${{ matrix.target }}.tar.gz -C dist .
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: viewshed_offsets-${{ matrix.target }}
+          path: viewshed_offsets-${{ matrix.target }}.tar.gz
+
+  release:
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          merge-multiple: true
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: "*.tar.gz"
+          generate_release_notes: true

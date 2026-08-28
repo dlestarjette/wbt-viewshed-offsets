@@ -1,0 +1,27 @@
+[package]
+name = "wbt-viewshed-offsets"
+version = "0.1.0"
+edition = "2021"
+authors = ["Daniel Lestarjette <daniel@lestarjette.com>"]
+license = "MIT"
+description = "WhiteboxTools plugin: viewshed with observer and target offsets (OFFSETA/OFFSETB), earth-curvature and refraction correction, and a maximum viewing distance."
+readme = "README.md"
+
+[[bin]]
+name = "viewshed_offsets"
+path = "src/main.rs"
+
+# Pinned to the upstream commit that src/main.rs was vendored from, so the
+# plugin is built against exactly the raster/vector/common crates its algorithm
+# came from. These crates are not published on crates.io under these names --
+# crates.io carries the unrelated next-generation `wbraster`/`wbvector` family --
+# so a git dependency is the only way to reach them.
+[dependencies]
+num_cpus = "1.6.2"
+whitebox_common = { git = "https://github.com/jblindsay/whitebox-tools", rev = "3d7c73cf562b6c58d2649c37f570e3e9a90322f2" }
+whitebox_raster = { git = "https://github.com/jblindsay/whitebox-tools", rev = "3d7c73cf562b6c58d2649c37f570e3e9a90322f2" }
+whitebox_vector = { git = "https://github.com/jblindsay/whitebox-tools", rev = "3d7c73cf562b6c58d2649c37f570e3e9a90322f2" }
+
+[profile.release]
+incremental = true
+strip = true
