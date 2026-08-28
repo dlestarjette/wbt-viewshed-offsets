@@ -51,11 +51,14 @@ jobs:
           "$BIN" version
           "$BIN" help | grep -q -- "--offset_b"
           # --curvature without --refraction_k must be refused, not defaulted.
-          if "$BIN" run --dem=x.tif --stations=x.shp -o=o.tif --curvature 2>&1 \
-              | grep -q "requires --refraction_k"; then
+          # The binary exits non-zero on refusal, and this shell runs with
+          # pipefail, so capture the output rather than piping it into grep.
+          OUT=$("$BIN" run --dem=x.tif --stations=x.shp -o=o.tif --curvature 2>&1 || true)
+          if grep -q "requires --refraction_k" <<< "$OUT"; then
             echo "refraction_k is correctly required"
           else
-            echo "FAIL: --curvature did not require --refraction_k"; exit 1
+            echo "FAIL: --curvature did not require --refraction_k"
+            echo "$OUT"; exit 1
           fi
 
       - name: Package
