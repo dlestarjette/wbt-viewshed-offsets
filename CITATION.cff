@@ -1,0 +1,33 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below, alongside WhiteboxTools (Lindsay 2016)."
+type: software
+title: "wbt-viewshed-offsets"
+abstract: "A WhiteboxTools plugin extending the Viewshed tool with a target height above ground (OFFSETB), in-loop earth-curvature and atmospheric-refraction correction, and a maximum viewing distance."
+authors:
+  - family-names: Lestarjette
+    given-names: Daniel
+    orcid: "https://orcid.org/0009-0000-7587-9716"
+    email: daniel@lestarjette.com
+version: 0.1.0
+date-released: 2026-08-28
+license: MIT
+repository-code: "https://github.com/dlestarjette/wbt-viewshed-offsets"
+keywords:
+  - viewshed
+  - visibility analysis
+  - WhiteboxTools
+  - GIS
+  - terrain analysis
+  - line of sight
+references:
+  - type: article
+    title: "Whitebox GAT: A case study in geomorphometric analysis"
+    authors:
+      - family-names: Lindsay
+        given-names: John B.
+    journal: "Computers & Geosciences"
+    volume: 95
+    start: 75
+    end: 84
+    year: 2016
+    doi: 10.1016/j.cageo.2016.07.003
