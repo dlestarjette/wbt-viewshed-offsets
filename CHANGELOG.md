@@ -1,8 +1,8 @@
 # Changelog
 
-## v0.1.0 — unreleased
+## v0.1.0 — 2026-08-28
 
-First working version. Not yet published.
+First working version.
 
 ### Added
 
